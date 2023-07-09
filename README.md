@@ -1,7 +1,7 @@
-#Currency Exchange App
-##Installation
+# Currency Exchange App
+## Installation
 To install and run the app, you'll need to have Node.js and the Expo CLI installed on your machine.
-    ###command
+    ### command
     1-npm install
     2-expo start
 
@@ -9,7 +9,7 @@ To install and run the app, you'll need to have Node.js and the Expo CLI install
 2-Install the required dependencies by running npm install in the project directory.
 3-Start the development server by running npm start.
 4-Use the Expo app on your mobile device to scan the QR code displayed in the terminal or in the browser window that opens.
-##Usage
+## Usage
 Once you have the app running on your device,th frist screen select your location and by defoult i'm get location and schedul notification :
 
 1-Select two currency from all currencies using the drop-down menu.
@@ -17,5 +17,5 @@ Once you have the app running on your device,th frist screen select your locatio
 3-View the exchange rate of currencies in the chart.
 
 
-##Contributing
+## Contributing
 If you'd like to contribute to this project, please fork the repository and submit a pull request with your changes.
