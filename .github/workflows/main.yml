@@ -19,7 +19,7 @@ jobs:
           architecture: x64 # (x64 or x86) - defaults to x64
       - uses: expo/expo-github-action@v5
         with:
-          expo-version: 6.x
+          expo-version: 3.x
           expo-username: ${{ secrets.EXPO_CLI_USERNAME }}
           expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
       - name: Install deps
