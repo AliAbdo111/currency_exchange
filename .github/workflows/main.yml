@@ -1,28 +1,69 @@
-name: Expo CI CD
+name: build
+on: 
+ push:
+  branches:
+    - develop
+Add the jobs build with ubuntu-latest as a runner machine.
+Add a step to fetch EXPO_TOKEN from the project’s settings.
+Add a step to set ENV.
+Add a step to install the expo.
+Add the steps to cache and install the node modules.
+Finally, add a step to create a build.
+Here is what our final build.yml looks like:-
 
-on:
-  push :
-    branches : master
+name: build
+on: 
+ push:
+  branches:
+    - develop
 
 jobs:
-  Build-for-android:
-    runs-on: macos-latest
+  build:
+    name: EAS build
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Check for EXPO_TOKEN
+        run: |
+          if [ -z "$(( secrets.EXPO_TOKEN ))" ]; then
+            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets. Learn more: https://docs.expo.dev/eas-update/github-actions"
+            exit 1
+          fi
+
+      - name: "Set ENV"
+        run: echo "$(BASE_URL)"     
+        env:
+          BASE_URL: https://exampleapp.com    
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
         with:
-          node-version: 14.x
-      - uses: actions/setup-java@v1.4.3
+          node-version: 16.x
+          cache: yarn
+
+      - name: Setup Expo
+        uses: expo/expo-github-action@v7
         with:
-          java-version: '9.0.4' # The JDK version to make available on the path.
-          java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
-          architecture: x64 # (x64 or x86) - defaults to x64
-      - uses: expo/expo-github-action@v5
-        with:
-          expo-version: 3.x
+          expo-version: latest
+          eas-version: latest
           expo-username: ${{ secrets.EXPO_CLI_USERNAME }}
           expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
-      - name: Install deps
-        run: yarn install
-      - name: Build Android APK Bundle
-        run: expo build:android
+
+      - name: Find yarn cache
+        id: yarn-cache-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Restore cache
+        uses: actions/cache@v2
+        with:
+          path: "$(( steps.yarn-cache-path.outputs.dir ))"
+          key: "$(( runner.os ))-yarn-$(( hashFiles('**/yarn.lock') ))"
+          restore-keys: "$(( runner.os ))-yarn-"
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Publish build
+        run: eas build --platform android --profile preview 
