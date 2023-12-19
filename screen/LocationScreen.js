@@ -22,6 +22,7 @@ const LocationScreen = () => {
           longitude: location.coords.longitude,
         });
         let name = `${address[0].country}`;
+          let text = 
         setDefaultLocation(name);
       }
     })();

@@ -14,7 +14,7 @@ const ChartScreen = () => {
   const [chartDuration, setChartDuration] = useState("1d");
 
   useEffect(() => {
-    const API_KEY = "your_api_key_here";
+    const API_KEY = "dsdd21e";
     const url = `https://api.currency-exchange-rates.com/v1/history?base_currency=${currencyOne}&target_currency=${currencyTwo}&apikey=${API_KEY}&interval=${chartDuration}`;
 
     fetch(url)
