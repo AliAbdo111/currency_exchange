@@ -3,32 +3,12 @@ on:
  push:
   branches:
     - develop
-Add the jobs build with ubuntu-latest as a runner machine.
-Add a step to fetch EXPO_TOKEN from the project’s settings.
-Add a step to set ENV.
-Add a step to install the expo.
-Add the steps to cache and install the node modules.
-Finally, add a step to create a build.
-Here is what our final build.yml looks like:-
-
-name: build
-on: 
- push:
-  branches:
-    - develop
 
 jobs:
   build:
     name: EAS build
     runs-on: ubuntu-latest
     steps:
-      - name: Check for EXPO_TOKEN
-        run: |
-          if [ -z "$(( secrets.EXPO_TOKEN ))" ]; then
-            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets. Learn more: https://docs.expo.dev/eas-update/github-actions"
-            exit 1
-          fi
-
       - name: "Set ENV"
         run: echo "$(BASE_URL)"     
         env:
@@ -66,4 +46,3 @@ jobs:
         run: yarn install --immutable
 
       - name: Publish build
-        run: eas build --platform android --profile preview 
